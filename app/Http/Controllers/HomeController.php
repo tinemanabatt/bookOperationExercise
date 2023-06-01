@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Books;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $getAllBooks = DB::table('books')
+            ->join('users', 'users.id', '=', 'books.user_id')
+            ->select('books.*', 'users.name')
+            ->where('deleted_at', NULL)
+            ->get();
+
+        //dd($getAllBooks);
+        $getAvailableBooks = Books::all()->where('deleted_at', NULL);
+        //dd($getAllBooks);
+        return view('home', [
+            'books' => $getAllBooks,
+            'availableBooks' => $getAvailableBooks
+        ]);
     }
 }

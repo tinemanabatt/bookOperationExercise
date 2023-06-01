@@ -15,16 +15,16 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('name_of_book');
             $table->string('image_of_book');
             $table->string('is_borrowed');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')
-            ->references('id')
-            ->on('users');
-            
+                ->references('id')
+                ->on('users');
         });
     }
 
